@@ -48,6 +48,10 @@ h1{font-size:19px;letter-spacing:1px}
 #send{background:linear-gradient(135deg,var(--red),var(--red2));color:#fff;border:none;border-radius:12px;padding:0 20px;font-size:14.5px;cursor:pointer}
 #send:disabled{opacity:.5}
 #cam{background:#fff;border:1.5px solid #d9c8b4;border-radius:12px;padding:0 14px;font-size:18px;cursor:pointer}
+#offbar{display:none;max-width:848px;margin:0 auto;width:100%;padding:0 14px 8px}
+#offbar.show{display:block}
+.offbox{background:#fff7e6;border:1px solid #eedcab;color:#8a6d1d;border-radius:10px;padding:9px 12px;font-size:12.5px;line-height:1.7}
+.offbox a{color:#8f2b2f;font-weight:600}
 footer{font-size:11px;color:var(--mut);text-align:center;padding:6px 12px 10px;line-height:1.6}
 .disc{display:inline-block;background:#fff7e6;border:1px solid #eedcab;color:#8a6d1d;border-radius:8px;padding:4px 8px;font-size:12px;margin-top:8px}
 .leaflet-popup-content{font-size:13px;line-height:1.6}
@@ -63,6 +67,7 @@ footer{font-size:11px;color:var(--mut);text-align:center;padding:6px 12px 10px;l
 </header>
 <div id="mapwrap"><div id="map"></div>
 <div class="mapnote">🗺 <b>一图游中轴</b>：15 处遗产点位置为真实地图坐标（逐个核验），编号按申遗构成要素官方顺序；红线为中轴主线，金色虚线为东西对称组群（太庙—社稷坛、天坛—先农坛）。点任意标记可看介绍、提问、听故事。地图底图 © OpenStreetMap 贡献者。</div></div>
+<div id="offbar"><div class="offbox">⚠️ 云端服务暂时连不上（本机离线/隧道重拨中）。<b>地图、分类模板、景点介绍照常可看</b>；<a href="./offline.html">点此切换离线知识版</a>继续问答（100块知识库内置，无需联网），或在网址后加 ?api=新地址 重试。</div></div>
 <div id="chat"></div>
 <div class="catbar" id="catbar"></div>
 <div id="catpanel"></div>
@@ -126,7 +131,7 @@ async function send(q){
    r2.querySelector("button").onclick=()=>send("给我讲讲"+m.focus+"的历史故事");
    chat.appendChild(r2);}
   history.push({role:"user",content:q},{role:"assistant",content:d.answer});
- }catch(e){t.remove();add("❌ 网络异常或服务未响应（当前服务地址 "+esc(API)+"）。可在网址后加 ?api=新地址 重试。","bot");}
+ }catch(e){t.remove();noteFail();add("❌ 网络异常或服务未响应（当前服务地址 "+esc(API)+"）。<a href='./offline.html' style='color:#8f2b2f'>点此切换离线知识版</a>，或在网址后加 ?api=新地址 重试。","bot");}
  window.scrollTo(0,document.body.scrollHeight);
 }
 // —— 拍照识图 ——
@@ -141,7 +146,7 @@ $("imgInput").onchange=async inp=>{
   const d=await r.json();t.remove();
   if(d.error){add("❌ "+esc(d.error),"bot");return;}
   add(fmt(d.answer||"")+showSrc(d.sources),"bot");
- }catch(e){t.remove();add("❌ 网络异常，识别未完成，请稍后重试。","bot");}
+ }catch(e){t.remove();noteFail();add("❌ 网络异常，识别未完成，请稍后重试。","bot");}
 };
 // —— 五分类导航（与离线版同源模板） ——
 (function(){
@@ -173,9 +178,18 @@ $("bar").onsubmit=e=>{e.preventDefault();const v=$("inp").value;$("inp").value="
 $("apilink").onclick=e=>{e.preventDefault();const v=prompt("服务地址（隧道重拨后在此更新一次即可）：",API);
  if(v&&v.trim()){localStorage.setItem("zzy_api",v.trim());location.reload();}};
 // —— 健康检查 ——
+function setOffline(on){
+ $("offbar").className=on?"show":"";
+ if(on)$("badge").textContent="⚠️ 云端未连通 · 离线可看 v2.6.0";
+}
 fetch(API+"/api/config").then(r=>r.json()).then(d=>{
  $("badge").textContent="🤖 "+(d.model||"云端")+" · "+(d.kb_chunks||"")+"块 · v2.6.0";
-}).catch(()=>{$("badge").textContent="⚠️ 服务未连通 v2.6.0";});
+ setOffline(false);
+}).catch(()=>{setOffline(true);});
+// 问答/识图失败累计 2 次也亮横幅（隧道半路重拨时）
+let _fails=0;
+function noteFail(){if(++_fails>=2)setOffline(true);}
+const _send=send;
 add("您好！我是<b>中轴智游</b>，北京中轴线金牌讲解员。<br>📍 上方是<b>真实地图</b>：15 处遗产点可点，每个点都能问；下方五分类有 25 条模板提示词；📷 还能拍照识古建。我的每句话都标注<b>知识库来源</b>，没有可靠资料就诚实说不知道。<br><br>试试地图或下面的快捷问题～","bot");
 </script>
 </body>
