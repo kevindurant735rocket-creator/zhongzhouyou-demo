@@ -92,7 +92,13 @@ function answer(q){
     return {html:"已按您的时间与兴趣，从知识库路线素材中为您选定路线"+(pick.length>1?"（共"+pick.length+"张备选）":"")+":"+pick.map(r=>"<h4>🗺 "+esc(r.title)+"</h4>"+fmt(r.md)).join("<hr style='border:none;border-top:1px dashed #e5d9c9;margin:10px 0'>")+DISC,src:"20_路线规划素材.md · 成品路线卡"};
   }
   // 2.5) 故事意图：查询含故事/传说词 → 按景点名定位对应故事；定位不到讲随机一个
+  // 库外地名刹车（v2.3.9）：问到知识库外的易混地名（地坛/长城/颐和园……）不得退随机故事充数，直接拒答
   if(/故事|传说|轶事|轶闻|典故/.test(q)){
+    if(NOT_SITES.some(w=>q.includes(w))){
+      let spotted=false;
+      for(const s of DATA.stories){if(s.spot&&q.includes(s.spot)){spotted=true;break}}
+      if(!spotted)return {html:"您问的这个地方不在北京中轴线知识库里，我没有它的可靠故事资料，不能拿别的景点的故事来充数。建议查询北京市文物局官网或\"北京中轴线\"官方渠道。"};
+    }
     let hit=null;
     for(const s of DATA.stories){if(s.spot&&q.includes(s.spot)){hit=s;break}}
     if(!hit){let bs=0;for(const s of DATA.stories){const sc=cover(q,s.title).r;if(sc>bs){bs=sc;hit=s}}
@@ -143,12 +149,15 @@ function spotIn(text){
   for(const a in alias){if(text.includes(a)&&DATA.images[alias[a]])return alias[a]}
   return null;
 }
+// 库外易混地名（v2.3.9，与引擎 intent.NOT_SITES 同源）：问到这些词一律不贴图
+const NOT_SITES=["地坛","月坛","日坛","雍和宫","孔庙","国子监","长城","颐和园","香山","北海","白塔寺","法源寺","潭柘寺","十三陵","卢沟桥","圆明园"];
+function hasForeign(q){return NOT_SITES.some(w=>q.includes(w))}
 function send(q){
   add(esc(q),"me");
   const t=document.createElement("div");t.className="row bot";t.innerHTML='<div class="av">🏯</div><div class="bub">正在检索知识库…</div>';chat.appendChild(t);chat.scrollTop=chat.scrollHeight;
   setTimeout(()=>{t.remove();const a=answer(q);
     add(a.html+(a.src?"<div class='src'>📚 <b>来源</b>："+esc(a.src)+"</div>":""),"bot");
-    if(!(a.src&&a.src.startsWith("21_"))){
+    if(!(a.src&&a.src.startsWith("21_"))&&!hasForeign(q)){
       const sp=spotIn(a.html.replace(/<[^>]+>/g,""));
       if(sp&&DATA.images[sp]){const im=DATA.images[sp];
         const r3=document.createElement("div");r3.className="row";
