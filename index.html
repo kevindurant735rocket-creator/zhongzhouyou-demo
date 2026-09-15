@@ -156,7 +156,8 @@ const map=L.map("map",{
  inertia:true, inertiaDeceleration:2800, inertiaMaxSpeed:1400
 }).setView([39.905,116.3925],12);
 window._leaflet_map=map;
-// —— 底图三源（高德标准默认+淡雅+卫星，右上角可切换；某源连续失败自动顺延） ——\nconst TILES=[{name:"\\U0001f5fa 标准地图",url:"https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}",sub:["1","2","3","4"],max:18,attr:"© 高德地图 AutoNavi"},{name:"\\U0001f3a8 淡雅地图",url:"https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",sub:"abcd",max:19,attr:"© OpenStreetMap 贡献者 © CARTO"},{name:"\\U0001f6f0 卫星影像",url:"https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}",sub:["1","2","3","4"],max:18,attr:"© 高德地图 AutoNavi"}];
+// —— 底图三源（高德标准默认+淡雅+卫星，右上角可切换；某源连续失败自动顺延） ——
+const TILES=[{name:"🗺 标准地图",url:"https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}",sub:["1","2","3","4"],max:18,attr:"© 高德地图 AutoNavi"},{name:"🎨 淡雅地图",url:"https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",sub:"abcd",max:19,attr:"© OpenStreetMap 贡献者 © CARTO"},{name:"🛰 卫星影像",url:"https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}",sub:["1","2","3","4"],max:18,attr:"© 高德地图 AutoNavi"}];
 const tileLayers=TILES.map(o=>L.tileLayer(o.url,{maxZoom:o.max,attribution:o.attr,subdomains:o.sub,keepBuffer:2,updateWhenZooming:false}));
 let _tileErr=0,_tileIdx=0;
 tileLayers.forEach(Ly=>Ly.on("tileerror",()=>{if(++_tileErr>=8){_tileErr=0;_tileIdx=(_tileIdx+1)%tileLayers.length;
