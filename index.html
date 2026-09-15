@@ -20,9 +20,8 @@ h1{font-size:19px;letter-spacing:1px}
 .leaflet-control-zoom a{width:32px!important;height:32px!important;line-height:32px!important;font-size:16px!important;border-radius:8px!important}
 .leaflet-control-zoom{border:none!important;box-shadow:0 2px 8px rgba(0,0,0,.15)!important;border-radius:10px!important;overflow:hidden}
 .leaflet-control-attribution{font-size:10px!important;opacity:.75}
-.mapnote{font-size:11.5px;color:var(--mut);padding:6px 2px 0;line-height:1.6}
 #maptoggle{display:none;width:100%;background:#fff;border:1px solid #e2cfc0;color:var(--red);border-radius:10px;padding:9px 12px;font-size:13.5px;cursor:pointer;min-height:44px}
-#mapwrap.folded #map,#mapwrap.folded .mapnote{display:none}
+#mapwrap.folded #map{display:none}
 #mapwrap.folded #maptoggle .tg-state::after{content:"展开"}
 #chat{padding:14px;display:flex;flex-direction:column;gap:12px}
 .row{display:flex;gap:10px;max-width:820px;width:100%;margin:0 auto}
@@ -114,8 +113,8 @@ footer{font-size:11px;color:var(--mut);text-align:center;padding:6px 12px 10px;l
   <div><h1>中轴智游</h1><div class="sub">北京中轴线文化导览智能体 · 地图 · 问答 · 识图</div></div>
 </header>
 <div id="layout">
-<div id="mapwrap"><button id="maptoggle" type="button">🗺 <b>一图游中轴</b> · 15 处遗产点地图 <span class="tg-state">（已收起，点我</span>）</button><div id="map"></div>
-<div class="mapnote">🗺 <b>一图游中轴</b>：15 处遗产点位置为真实地图坐标（逐个核验），编号按申遗构成要素官方顺序；红线为中轴主线，金色虚线为东西对称组群（太庙—社稷坛、天坛—先农坛）。点任意标记可看介绍、提问、听故事。底图右上角可在标准/淡雅/卫星间切换（© 高德地图 · © OpenStreetMap/CARTO）。</div></div>
+<div id="mapwrap"><button id="maptoggle" type="button">🗺 地图<span class="tg-state">（已收起，点我展开</span>）</button><div id="map"></div>
+</div>
 <div id="maincol">
 <div id="offbar"><div class="offbox">⚠️ 云端服务暂时连不上（本机离线/隧道重拨中）。<b>地图、分类模板、景点介绍照常可看</b>；<a href="./offline.html">点此切换离线知识版</a>继续问答（100块知识库内置，无需联网），或在网址后加 ?api=新地址 重试。</div></div>
 <div class="catbar" id="catbar"></div>
