@@ -66,7 +66,6 @@ h1{font-size:19px;letter-spacing:1px}
 #inp:focus{border-color:var(--red2)}
 #send{background:linear-gradient(135deg,var(--red),var(--red2));color:#fff;border:none;border-radius:12px;padding:0 20px;font-size:14.5px;cursor:pointer;white-space:nowrap}
 #send:disabled{opacity:.5}
-#cam{background:#fff;border:1.5px solid #d9c8b4;border-radius:12px;padding:0 14px;font-size:18px;cursor:pointer;flex-shrink:0}
 .fups{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 .fup{background:#fffdf8;border:1px dashed #d9b48f;color:#7c3f21;border-radius:10px;padding:7px 12px;font-size:12.5px;cursor:pointer;text-align:left}
 .fup:hover{background:#fdf0e3;border-style:solid}
@@ -122,7 +121,7 @@ footer{font-size:11px;color:var(--mut);text-align:center;padding:6px 12px 10px;l
 <body>
 <header>
   <div class="logo">🏯</div>
-  <div><h1>中轴智游</h1><div class="sub">北京中轴线文化导览智能体 · 地图 · 问答 · 识图</div></div>
+  <div><h1>中轴智游</h1><div class="sub">北京中轴线文化导览智能体 · 地图 · 问答 · 路线</div></div>
 </header>
 <div id="layout">
 <div id="mapwrap"><button id="maptoggle" type="button">🗺 地图<span class="tg-state">（已收起，点我展开</span>）</button><div id="map"></div>
@@ -132,12 +131,12 @@ footer{font-size:11px;color:var(--mut);text-align:center;padding:6px 12px 10px;l
 <div class="catbar" id="catbar"></div>
 <div id="catpanel"></div>
 <div id="chat"></div>
-<form id="bar"><button type="button" id="cam" title="拍照识古建">📷</button><input type="file" id="imgInput" accept="image/*" style="display:none"><input id="inp" placeholder="问我中轴线的问题，如：中轴线有多长？去哪吃饭？" autocomplete="off"><button id="send">发送</button></form>
+<form id="bar"><input id="inp" placeholder="问我中轴线的问题，如：中轴线有多长？去哪吃饭？" autocomplete="off"><button id="send">发送</button></form>
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
 <script>
-const DATA={"spots":[{"n":1,"name":"钟鼓楼","lat":39.9402,"lng":116.3897,"img":"钟鼓楼","blurb":"元明清三代报时中心，“暮鼓晨钟”定全城作息","q":"钟鼓楼的暮鼓晨钟是什么制度？"},{"n":2,"name":"万宁桥","lat":39.935,"lng":116.3899,"img":"万宁桥","blurb":"元代始建单孔石拱桥，中轴线上最古老的桥，至今通行","q":"万宁桥的镇水兽是什么？"},{"n":3,"name":"景山","lat":39.9245,"lng":116.3904,"img":"景山","blurb":"明清皇家御苑，中轴线制高点，可俯瞰故宫全景","q":"景山为什么被称为最佳观景点？"},{"n":4,"name":"故宫","lat":39.9174,"lng":116.3908,"img":"故宫","blurb":"明清两代皇宫，世界现存最大最完整的木结构宫殿群","q":"太和殿的脊兽为什么是10只？"},{"n":5,"name":"端门","lat":39.909,"lng":116.3912,"img":"端门","blurb":"天安门与午门之间的礼仪之门，大典前仪仗整队候驾","q":"端门是怎样的一座门？"},{"n":6,"name":"天安门","lat":39.9074,"lng":116.3913,"img":"天安门","blurb":"皇城正门，明清颁诏之所，1949年开国大典举办地","q":"梁思成怎么评价北京中轴线？"},{"n":7,"name":"外金水桥","lat":39.9068,"lng":116.3912,"img":"外金水桥","blurb":"天安门前七座汉白玉石拱桥群","q":"内金水桥和外金水桥有什么区别？"},{"n":8,"name":"天安门广场","lat":39.9027,"lng":116.3914,"img":"天安门广场","blurb":"人民英雄纪念碑、人民大会堂、国家博物馆所在地","q":"天安门广场怎么进？"},{"n":9,"name":"太庙","lat":39.91,"lng":116.3936,"img":"太庙","blurb":"明清皇家祖庙，“左祖”，今劳动人民文化宫","q":"左祖右社是什么意思？"},{"n":10,"name":"社稷坛","lat":39.9098,"lng":116.3886,"img":"社稷坛","blurb":"明清祭祀土神谷神之所，“右社”，铺五色土，今中山公园","q":"社稷坛的五色土有什么讲究？"},{"n":11,"name":"南段道路遗存","lat":39.888,"lng":116.3922,"img":"南段道路遗存","blurb":"2004/2022年考古揭露的明清御道遗存，实证南段走向","q":"中轴线南段御道是怎么发现的？"},{"n":12,"name":"天坛","lat":39.8799,"lng":116.4029,"img":"天坛","blurb":"明清皇帝祭天场所，祈年殿为标志，南段东","q":"天坛祈年殿有什么特别？"},{"n":13,"name":"先农坛","lat":39.8748,"lng":116.3913,"img":"先农坛","blurb":"明清皇帝亲耕耤田之所，“一亩三分地”典故来源，南段西","q":"一亩三分地这个俗语从哪来？"},{"n":14,"name":"正阳门","lat":39.8992,"lng":116.3916,"img":"正阳门","blurb":"内城正门，城楼箭楼均存，俗称“前门”","q":"正阳门为什么叫前门？"},{"n":15,"name":"永定门","lat":39.8711,"lng":116.3931,"img":"永定门","blurb":"外城正门，2004年依史料复建，中轴线南端起点","q":"永定门是原建筑吗？"}],"cats":[{"id":"tour","icon":"🗺","name":"游中轴","desc":"路线规划：半天/一天/亲子/老人/地铁","templates":[{"label":"📸 半天拍照精华线","q":"半天时间喜欢拍照，帮我规划路线"},{"label":"🕰 一天深度怎么安排","q":"一天时间怎么安排？"},{"label":"🧒 带孩子走哪条线","q":"带孩子游中轴线推荐哪条线？"},{"label":"👴 带老人半天轻松游","q":"带老人半天怎么游中轴线最轻松？"},{"label":"🚇 天安门到钟鼓楼地铁","q":"从天安门到钟鼓楼坐地铁几号线？"}]},{"id":"history","icon":"📜","name":"讲历史","desc":"申遗/人物评价/考古发现/报时制度","templates":[{"label":"📏 中轴有多长·含哪15处","q":"中轴线有多长，包括哪15处？"},{"label":"🏛 何时申遗成功","q":"中轴线是什么时候申遗成功的？"},{"label":"👓 梁思成如何评价","q":"梁思成怎么评价北京中轴线？"},{"label":"⛏ 南段御道如何发现","q":"中轴线南段御道是怎么发现的？"},{"label":"🚪 永定门是原建吗","q":"永定门是原建筑吗？"},{"label":"🔔 暮鼓晨钟是什么制度","q":"钟鼓楼的暮鼓晨钟是什么制度？"},{"label":"📖 听永定门的故事","q":"给我讲讲永定门的故事"},{"label":"✨ 来个最有趣的故事","q":"给我讲讲中轴线上最有趣的一个历史故事"}]},{"id":"arch","icon":"🏯","name":"看建筑","desc":"脊兽/金水桥/五色土/祈年殿/礼制","templates":[{"label":"🐉 太和殿为何10只脊兽","q":"太和殿的脊兽为什么是10只？"},{"label":"🐲 镇水兽哪尊是元代","q":"万宁桥的镇水兽哪些是元代的？"},{"label":"🌉 内外金水桥区别","q":"内金水桥和外金水桥有什么区别？"},{"label":"🟫 五色土的讲究","q":"社稷坛的五色土有什么讲究？"},{"label":"🙏 祈年殿特别在哪","q":"天坛祈年殿有什么特别？"},{"label":"⚖ 左祖右社是何意","q":"左祖右社是什么意思？"}]},{"id":"textbook","icon":"📖","name":"对课本","desc":"人教版课文关联：音乐/语文/历史/地理/美术/道法（35篇）","templates":[{"label":"📚 课本学过中轴线吗","q":"课本里学过中轴线吗？有哪些课文相关？"},{"label":"🏛 历史课怎么讲紫禁城","q":"历史课本里怎么讲紫禁城？"},{"label":"🎵 我爱北京天安门","q":"音乐课上那首《我爱北京天安门》跟天安门有什么关系？"},{"label":"🎨 美术课讲故宫提到啥","q":"美术课讲故宫会提到什么？"},{"label":"📖 开国大典是第几课","q":"开国大典是第几课？"},{"label":"✊ 五四运动是第几课","q":"五四运动是历史第几课？"},{"label":"✍ 写景课能用来看中轴线吗","q":"语文课上学的写景方法能用来看中轴线吗？"},{"label":"🏫 地理课怎么讲北京","q":"地理课怎么讲北京？"},{"label":"🎓 高中课文有中轴线吗","q":"高中课文里有中轴线吗？"},{"label":"🎼 音乐课还有天安门吗","q":"音乐课本里有天安门吗？"}]},{"id":"practical","icon":"🎒","name":"实用派","desc":"预约/进场/吃饭/交通/观景","templates":[{"label":"🎫 故宫预约与闭馆","q":"故宫怎么预约？周几闭馆？"},{"label":"🇨🇳 天安门广场怎么进","q":"天安门广场怎么进？"},{"label":"🍜 沿线去哪吃饭","q":"沿线去哪里吃饭？"},{"label":"🌉 故宫景山间那条河","q":"故宫和景山之间那条河是什么？有多宽？"},{"label":"🌇 为何景山最佳观景","q":"景山为什么被称为最佳观景点？"}]}],"api":"https://unbounded-umbilical-wise.ngrok-free.dev","meta":{"version":"2.7.19"}};
+const DATA={"spots":[{"n":1,"name":"钟鼓楼","lat":39.9402,"lng":116.3897,"img":"钟鼓楼","blurb":"元明清三代报时中心，“暮鼓晨钟”定全城作息","q":"钟鼓楼的暮鼓晨钟是什么制度？"},{"n":2,"name":"万宁桥","lat":39.935,"lng":116.3899,"img":"万宁桥","blurb":"元代始建单孔石拱桥，中轴线上最古老的桥，至今通行","q":"万宁桥的镇水兽是什么？"},{"n":3,"name":"景山","lat":39.9245,"lng":116.3904,"img":"景山","blurb":"明清皇家御苑，中轴线制高点，可俯瞰故宫全景","q":"景山为什么被称为最佳观景点？"},{"n":4,"name":"故宫","lat":39.9174,"lng":116.3908,"img":"故宫","blurb":"明清两代皇宫，世界现存最大最完整的木结构宫殿群","q":"太和殿的脊兽为什么是10只？"},{"n":5,"name":"端门","lat":39.909,"lng":116.3912,"img":"端门","blurb":"天安门与午门之间的礼仪之门，大典前仪仗整队候驾","q":"端门是怎样的一座门？"},{"n":6,"name":"天安门","lat":39.9074,"lng":116.3913,"img":"天安门","blurb":"皇城正门，明清颁诏之所，1949年开国大典举办地","q":"梁思成怎么评价北京中轴线？"},{"n":7,"name":"外金水桥","lat":39.9068,"lng":116.3912,"img":"外金水桥","blurb":"天安门前七座汉白玉石拱桥群","q":"内金水桥和外金水桥有什么区别？"},{"n":8,"name":"天安门广场","lat":39.9027,"lng":116.3914,"img":"天安门广场","blurb":"人民英雄纪念碑、人民大会堂、国家博物馆所在地","q":"天安门广场怎么进？"},{"n":9,"name":"太庙","lat":39.91,"lng":116.3936,"img":"太庙","blurb":"明清皇家祖庙，“左祖”，今劳动人民文化宫","q":"左祖右社是什么意思？"},{"n":10,"name":"社稷坛","lat":39.9098,"lng":116.3886,"img":"社稷坛","blurb":"明清祭祀土神谷神之所，“右社”，铺五色土，今中山公园","q":"社稷坛的五色土有什么讲究？"},{"n":11,"name":"南段道路遗存","lat":39.888,"lng":116.3922,"img":"南段道路遗存","blurb":"2004/2022年考古揭露的明清御道遗存，实证南段走向","q":"中轴线南段御道是怎么发现的？"},{"n":12,"name":"天坛","lat":39.8799,"lng":116.4029,"img":"天坛","blurb":"明清皇帝祭天场所，祈年殿为标志，南段东","q":"天坛祈年殿有什么特别？"},{"n":13,"name":"先农坛","lat":39.8748,"lng":116.3913,"img":"先农坛","blurb":"明清皇帝亲耕耤田之所，“一亩三分地”典故来源，南段西","q":"一亩三分地这个俗语从哪来？"},{"n":14,"name":"正阳门","lat":39.8992,"lng":116.3916,"img":"正阳门","blurb":"内城正门，城楼箭楼均存，俗称“前门”","q":"正阳门为什么叫前门？"},{"n":15,"name":"永定门","lat":39.8711,"lng":116.3931,"img":"永定门","blurb":"外城正门，2004年依史料复建，中轴线南端起点","q":"永定门是原建筑吗？"}],"cats":[{"id":"tour","icon":"🗺","name":"游中轴","desc":"路线规划：半天/一天/亲子/老人/地铁","templates":[{"label":"📸 半天拍照精华线","q":"半天时间喜欢拍照，帮我规划路线"},{"label":"🕰 一天深度怎么安排","q":"一天时间怎么安排？"},{"label":"🧒 带孩子走哪条线","q":"带孩子游中轴线推荐哪条线？"},{"label":"👴 带老人半天轻松游","q":"带老人半天怎么游中轴线最轻松？"},{"label":"🚇 天安门到钟鼓楼地铁","q":"从天安门到钟鼓楼坐地铁几号线？"}]},{"id":"history","icon":"📜","name":"讲历史","desc":"申遗/人物评价/考古发现/报时制度","templates":[{"label":"📏 中轴有多长·含哪15处","q":"中轴线有多长，包括哪15处？"},{"label":"🏛 何时申遗成功","q":"中轴线是什么时候申遗成功的？"},{"label":"👓 梁思成如何评价","q":"梁思成怎么评价北京中轴线？"},{"label":"⛏ 南段御道如何发现","q":"中轴线南段御道是怎么发现的？"},{"label":"🚪 永定门是原建吗","q":"永定门是原建筑吗？"},{"label":"🔔 暮鼓晨钟是什么制度","q":"钟鼓楼的暮鼓晨钟是什么制度？"},{"label":"📖 听永定门的故事","q":"给我讲讲永定门的故事"},{"label":"✨ 来个最有趣的故事","q":"给我讲讲中轴线上最有趣的一个历史故事"}]},{"id":"arch","icon":"🏯","name":"看建筑","desc":"脊兽/金水桥/五色土/祈年殿/礼制","templates":[{"label":"🐉 太和殿为何10只脊兽","q":"太和殿的脊兽为什么是10只？"},{"label":"🐲 镇水兽哪尊是元代","q":"万宁桥的镇水兽哪些是元代的？"},{"label":"🌉 内外金水桥区别","q":"内金水桥和外金水桥有什么区别？"},{"label":"🟫 五色土的讲究","q":"社稷坛的五色土有什么讲究？"},{"label":"🙏 祈年殿特别在哪","q":"天坛祈年殿有什么特别？"},{"label":"⚖ 左祖右社是何意","q":"左祖右社是什么意思？"}]},{"id":"textbook","icon":"📖","name":"对课本","desc":"人教版课文关联：音乐/语文/历史/地理/美术/道法（35篇）","templates":[{"label":"📚 课本学过中轴线吗","q":"课本里学过中轴线吗？有哪些课文相关？"},{"label":"🏛 历史课怎么讲紫禁城","q":"历史课本里怎么讲紫禁城？"},{"label":"🎵 我爱北京天安门","q":"音乐课上那首《我爱北京天安门》跟天安门有什么关系？"},{"label":"🎨 美术课讲故宫提到啥","q":"美术课讲故宫会提到什么？"},{"label":"📖 开国大典是第几课","q":"开国大典是第几课？"},{"label":"✊ 五四运动是第几课","q":"五四运动是历史第几课？"},{"label":"✍ 写景课能用来看中轴线吗","q":"语文课上学的写景方法能用来看中轴线吗？"},{"label":"🏫 地理课怎么讲北京","q":"地理课怎么讲北京？"},{"label":"🎓 高中课文有中轴线吗","q":"高中课文里有中轴线吗？"},{"label":"🎼 音乐课还有天安门吗","q":"音乐课本里有天安门吗？"}]},{"id":"practical","icon":"🎒","name":"实用派","desc":"预约/进场/吃饭/交通/观景","templates":[{"label":"🎫 故宫预约与闭馆","q":"故宫怎么预约？周几闭馆？"},{"label":"🇨🇳 天安门广场怎么进","q":"天安门广场怎么进？"},{"label":"🍜 沿线去哪吃饭","q":"沿线去哪里吃饭？"},{"label":"🌉 故宫景山间那条河","q":"故宫和景山之间那条河是什么？有多宽？"},{"label":"🌇 为何景山最佳观景","q":"景山为什么被称为最佳观景点？"}]}],"api":"https://unbounded-umbilical-wise.ngrok-free.dev","meta":{"version":"2.7.20"}};
 const API=(new URLSearchParams(location.search).get("api"))||localStorage.getItem("zzy_api")||DATA.api||location.origin;
 const $=id=>document.getElementById(id);
 const chat=$("chat");
@@ -279,26 +278,6 @@ async function send(q,lensOverride){
   history.push({role:"user",content:q},{role:"assistant",content:d.answer});
  }catch(e){t.remove();noteFail();add("❌ 网络异常或服务未响应（当前服务地址 "+esc(API)+"）。<a href='./offline.html' style='color:#8f2b2f'>点此切换离线知识版</a>，或在网址后加 ?api=新地址 重试。","bot");}
 }
-// —— 拍照识图（v2.7.19：本地canvas先压到1600px内再上传，手机直拍秒传；skip头穿ngrok警告页） ——
-$("cam").onclick=()=>$("imgInput").click();
-function downscaleImage(f){return new Promise(res=>{const img=new Image();const u=URL.createObjectURL(f);
- img.onload=()=>{URL.revokeObjectURL(u);let w=img.width,h=img.height;const s=Math.min(1,1600/Math.max(w,h));
-  w=Math.round(w*s);h=Math.round(h*s);const c=document.createElement("canvas");c.width=w;c.height=h;
-  c.getContext("2d").drawImage(img,0,0,w,h);c.toBlob(b=>res(b||f),"image/jpeg",0.85);};
- img.onerror=()=>{URL.revokeObjectURL(u);res(f);};img.src=u;});}
-$("imgInput").onchange=async inp=>{
- const f=inp.target.files[0];inp.value="";if(!f)return;
- add("<img src='"+URL.createObjectURL(f)+"' onload='URL.revokeObjectURL(this.src)' style='max-width:220px;border-radius:10px;display:block;margin-bottom:6px'>（请帮我识别这张古建照片）","me");
- const t=document.createElement("div");t.className="row bot";t.innerHTML='<div class="av">🏯</div><div class="bub">轴轴正在看照片…</div>';chat.appendChild(t);scrollChat(t);
- try{
-  const blob=await downscaleImage(f);
-  const fd=new FormData();fd.append("image",blob,"photo.jpg");
-  const r=await fetch(API+"/api/identify",{method:"POST",headers:{"ngrok-skip-browser-warning":"true"},body:fd});
-  const d=await r.json();t.remove();
-  if(d.error){add("❌ "+esc(d.error),"bot");return;}
-  add(fmt(d.answer||""),"bot");
- }catch(e){t.remove();noteFail();add("❌ 网络异常，识别未完成，请稍后重试。","bot");}
-};
 // —— 地图折叠（v2.7.12：全端默认收起省屏，点则展开；展开后重绘防瓦片错位） ——
 (function(){const w=$("mapwrap"),b=$("maptoggle");if(!w||!b)return;
  w.classList.add("folded");
@@ -371,11 +350,11 @@ if(window.visualViewport){visualViewport.addEventListener("resize",()=>{const b=
 // —— 健康检查（badge 已下线，仅控制离线横幅） ——
 function setOffline(on){$("offbar").className=on?"show":"";}
 fetch(API+"/api/config",{headers:{"ngrok-skip-browser-warning":"true"}}).then(r=>r.json()).then(()=>{setOffline(false);}).catch(()=>{setOffline(true);});
-// 问答/识图失败累计 2 次也亮横幅（隧道半路重拨时）
+// 问答失败累计 2 次也亮横幅（隧道半路重拨时）
 let _fails=0;
 function noteFail(){if(++_fails>=2)setOffline(true);}
 const _send=send;
-add("您好！我是<b>中轴智游</b>，北京中轴线金牌讲解员。<br>📍 上方<b>地图默认收起</b>（点🗺 地图按钮展开）：15 处遗产点可点，每个点都能问；下方五分类默认只显示标题行，点开展开模板提问；📷 还能拍照识古建。我的回答都出自<b>自建知识库</b>，没有可靠资料就诚实说不知道。","bot");
+add("您好！我是<b>中轴智游</b>，北京中轴线金牌讲解员。<br>📍 上方<b>地图默认收起</b>（点🗺 地图按钮展开）：15 处遗产点可点，每个点都能问；下方五分类默认只显示标题行，点开展开模板提问；直接问景点名字，我带你看它的故事与建筑。我的回答都出自<b>自建知识库</b>，没有可靠资料就诚实说不知道。","bot");
 </script>
 </body>
 </html>
