@@ -19,7 +19,7 @@ open index.html        # macOS
 open offline.html      # 含完整知识库的那一版
 ```
 
-或者直接看在线版本：本仓库的 Pages。
+或者直接看在线版本：<https://kevindurant735rocket-creator.github.io/zhongzhouyou-demo/>
 
 ## 15 个点位
 
